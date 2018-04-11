@@ -70,12 +70,28 @@ Game.prototype.checkForRowColWin = function() {
   return false;
 }
 
+Game.prototype.checkForTie = function() {
+  for (var i = 0; i < this.n; i++) {
+    for (var j = 0; j < this.n; j++) {
+      if (this.board[i][j] === '.') {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
 Game.prototype.placeSymbol = function(i, j) {
   if (this.ongoing && this.board[i][j] === '.') {
     var symbol = this.playerSymbols[this.currentPlayer];
     this.board[i][j] = symbol;
     if (this.checkForDiagWin() || this.checkForRowColWin()) {
       console.log('Victory for Player', symbol);
+      this.ongoing = false;
+      return;
+    }
+    if (this.checkForTie()) {
+      console.log('Tie Game!');
       this.ongoing = false;
       return;
     }
